@@ -1,3 +1,15 @@
+/*
+	john kennedy - assignment2.java
+
+	various sorts and searches, interactive
+
+	github.com/jo-hnkennedy/assignment2
+		
+	on my honor i have not given or received any unauthorized aid on this work 
+
+	works cited at bottom
+*/
+
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -33,6 +45,21 @@ public class assignment2 {
 			* eliminates duplicates
 			* eliminates punctuation 
 			* making everything lower case to solve the issue of 'A' vs 'a' */
+
+	public static void searchOutput (long startTime, long endTime, String type, int comparisons, String key, int[] results) {
+
+		double milliseconds = (endTime - startTime) / 1e6;
+		System.out.println(type + " finished in " + milliseconds + " milliseconds");
+		System.out.println(comparisons + " comparisons");
+
+		if (results[0] > -1) {
+			System.out.print(key + " found at spots ");
+			stringify(results);
+		}
+		else {
+			System.out.println(key + " not found");
+		}
+	}
 
 	public static String[] format(ArrayList<String> input) {
 
@@ -70,6 +97,13 @@ public class assignment2 {
 		* this is where progression lines in sorts are created 
 		*/
 	public static void stringify(String[] arr) {
+		for (int g = 0; g < arr.length; g++) {
+			System.out.print(arr[g] + " ");
+		}
+		System.out.println("");
+	}
+
+	public static void stringify(int[] arr) {
 		for (int g = 0; g < arr.length; g++) {
 			System.out.print(arr[g] + " ");
 		}
@@ -169,7 +203,7 @@ public class assignment2 {
 			int mid = (low + high) / 2;
 			mergesort(arr, helper, low, mid); //sorting left half
 			mergesort(arr, helper, mid+1, high); //sorting right half
-			merge(arr, helper, low, mid, high);
+			merge(arr, helper, low, mid, high - 1);
 		}
 	}
 
@@ -219,7 +253,8 @@ public class assignment2 {
 
 	/* based off of http://ppd.fnal.gov/experiments/cdms/old_files/software/net/dist/sort.java 
 
-		* i used a government site because that means it's efficient and functional */
+		* i used a government site because that means it's efficient, satisfying, and functional */
+
 	private static void quicksort(String[] arr, int low, int high) {
 
 		if (progressions)
@@ -238,6 +273,7 @@ public class assignment2 {
 
 	/* breaking down arr[] and re-organizing it around a pivot point, in this case the first value */
 	private static int partition (String[] arr, int low, int high) {
+		high--;
     		String pivot = arr[low];
    
 		/* i'm just begging for an infinite loop here aren't I */ 
@@ -266,12 +302,20 @@ public class assignment2 {
     			for(int j = 0; j < i; j++) {
 				comparisons++;
         			if(arr[j].compareTo(arr[j + 1]) > -1) {
+					/* moving small elements up, letting them 'bubble up' */
 					swap(arr, j, i);
 					stringify(arr);
         			}
     			}
 		}
 	}
+
+	/* ********
+		
+		SEARCHES - all searches return an array of indexes for each found index
+			* this isn't very applicable for this assignment, where no duplicates should be in my file, but is useful in general 
+
+															***************** */
 
 	/* two linear() methods so you can search a specific section of a sorted array or the whole thing */
 	public static int[] linear(String[] arr, String key) {
@@ -296,6 +340,7 @@ public class assignment2 {
 
 	}
 
+	/* quadratic - breaks down sorted array into sections to linear search */
 	public static int[] quadratic(String[] arr, String key) {
 		int jumpSize = (int) Math.sqrt(arr.length);
 
@@ -330,6 +375,7 @@ public class assignment2 {
 		return binary(arr, key, 0, arr.length - 1);
 	}
 
+	/* binary search - searches array by chunks recursively */
 	public static int[] binary(String[] arr, String key, int low, int high) {
 		int mid = (low + high) / 2;
 		ArrayList<Integer> indexes = new ArrayList<Integer>();
@@ -362,12 +408,7 @@ public class assignment2 {
 					
 	}
 			
-	public static String inputFilePath;
-
 	public static void main(String args[]) throws FileNotFoundException, NoSuchElementException {
-
-		/* this is the maximum number of words that can be sorted or searched */
-		final int MAX_WORDS = 300000;
 
 		Scanner input = new Scanner(System.in);
 		boolean quit = false;
@@ -385,6 +426,7 @@ public class assignment2 {
 			}
 			
 			else {
+				rawWords.clear();
 				System.out.print("As2Small.txt or As2Large.txt? ");
 				String inputFile = input.next();
 				Matcher m = fileReg.matcher(inputFile);
@@ -431,29 +473,66 @@ public class assignment2 {
 						System.out.print("1 for quick, 2 for merge, 3 for bubble, 4 for insertion, 5 for selection: ");
 						sortType = input.nextInt();
 					}
-
+				
+					/* sorts[sortType] gives the algorithm name */	
+					String[] sorts = {"", "quick", "merge", "bubble", "insertion", "selection"};
+					long startTime, endTime;
+				
+					/* dealing with that pesky output */	
 					if (sortType == 1) {
+						comparisons = 0;
+						swaps = 0;
+						startTime = System.nanoTime();
 						quicksort(words);
+						endTime = System.nanoTime();
+						System.out.println(sorts[sortType] + " finshed in " + (endTime - startTime)/1e6 + " milliseconds");
+						System.out.println(comparisons + " comparisons");
+						System.out.println(swaps + " swaps");
 					}
 
 					else if (sortType == 2) {
+						comparisons = 0;
+						swaps = 0;
+						startTime = System.nanoTime();
 						mergesort(words);
+						endTime = System.nanoTime();
+						System.out.println(sorts[sortType] + " finshed in " + (endTime - startTime)/1e6 + " milliseconds");
+						System.out.println(comparisons + " comparisons");
+						System.out.println(swaps + " swaps");
 					}
 
 					else if (sortType == 3) {
+						comparisons = 0;
+						swaps = 0;
+						startTime = System.nanoTime();
 						bubble(words);
+						endTime = System.nanoTime();
+						System.out.println(sorts[sortType] + " finshed in " + (endTime - startTime)/1e6 + " milliseconds");
+						System.out.println(comparisons + " comparisons");
+						System.out.println(swaps + " swaps");
 					}
 
 					else if (sortType == 4) {
+						comparisons = 0;
+						swaps = 0;
+						startTime = System.nanoTime();
 						insertion(words);
+						endTime = System.nanoTime();
+						System.out.println(sorts[sortType] + " finshed in " + (endTime - startTime)/1e6 + " milliseconds");
+						System.out.println(comparisons + " comparisons");
+						System.out.println(swaps + " swaps");
 					}
 
 					else if (sortType == 5) {
+						comparisons = 0;
+						swaps = 0;
+						startTime = System.nanoTime();
 						selection(words);
+						endTime = System.nanoTime();
+						System.out.println(sorts[sortType] + " finshed in " + (endTime - startTime)/1e6 + " milliseconds");
+						System.out.println(comparisons + " comparisons");
+						System.out.println(swaps + " swaps");
 					}
-	
-					if (progressions)
-						stringify(words);
 						
 				}
 
@@ -470,9 +549,6 @@ public class assignment2 {
 						searchType = input.nextInt();		
 					}
 
-					int[] results;
-	
-
 					long startTime = 0;
 					long endTime = 0;
 
@@ -483,8 +559,9 @@ public class assignment2 {
 						comparisons = 0;
 						swaps = 0;
 						startTime = System.nanoTime();
-						results = linear(words, key);
+						int[] results = binary(words, key);
 						endTime = System.nanoTime();
+						searchOutput(startTime, endTime, searches[searchType], comparisons, key, results);
 					}
 
 					else if (searchType == 2) {
@@ -492,8 +569,9 @@ public class assignment2 {
 						comparisons = 0;
 						swaps = 0;
 						startTime = System.nanoTime();
-						results = binary(words, key);
+						int[] results = binary(words, key);
 						endTime = System.nanoTime();
+						searchOutput(startTime, endTime, searches[searchType], comparisons, key, results);
 					}
 				
 					else if (searchType == 3) {
@@ -501,15 +579,11 @@ public class assignment2 {
 						comparisons = 0;
 						swaps = 0;
 						startTime = System.nanoTime();
-						results = quadratic(words, key);
+						int[] results = binary(words, key);
 						endTime = System.nanoTime();
-			 		}
-					
-					double milliseconds = (endTime - startTime) / 1e6;
-
-					System.out.println(searches[searchType] + " finished in " + milliseconds + " milliseconds");
-					System.out.println(comparisons + " comparisons");
-					
+						searchOutput(startTime, endTime, searches[searchType], comparisons, key, results);
+			 		} 
+			
 				}	
 			}
 						
@@ -523,5 +597,8 @@ public class assignment2 {
 
 http://www.java2s.com/Tutorial/Java/0240__Swing/UsingJFileChooser.htm
 http://stackoverflow.com/questions/16351875/jfilechooser-on-a-button-click
+http://ppd.fnal.gov/experiments/cdms/old_files/software/net/dist/sort.java
+http://www.kriblog.com/j2se/util/various-bubble-sort-example-in-java-using-string-array-arraylist-linked-list-recursive.html
+'Cracking the Coding Inteview', vol 6 - McDowell
 
 */
