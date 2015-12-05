@@ -2,15 +2,16 @@ repo for 'programming data structures' assignment2 / mid year project
 
 a guide to the files:
 
-	files '$NUMBER.txt' (like 500.txt, 75000.txt), are shuffled lists of words to be sorted. the number refers to the number of words in the file
+	files 'test_files/$NUMBER.txt' (like 500.txt, 75000.txt), are shuffled lists of words to be sorted. the number refers to the number of words in the file
 
+	all mathematica notebooks/converted pdf notebooks are in designated folder
+	
 	sorts_searches are demos of linear and selection sort in mathematica, because mathematica can do anything
 
-	files '$ALGORITHM.pl' (like selection.pl, insertion.pl) are perl files that run the title algorithm for each of the files, outputting the number of words, the number of comparisons, the number of swaps, and the total time in milliseconds to a csv file
+	files 'perl_scripts/$ALGORITHM.pl' (like selection.pl, insertion.pl) are perl files that run the title algorithm for each of the files, outputting the number of words, the number of comparisons, the number of swaps, and the total time in milliseconds to a csv file
 	
-	files '$ALGORITHM.csv' (selection.csv, insertion.csv) are csv output files of $ALGORITHM.pl
+	files 'csv_outputs/$ALGORITHM.csv' (selection.csv, insertion.csv) are csv output files of $ALGORITHM.pl
 
 	assignment2.java is my java source file
-	assignment2GUI.java is my java source file with a GUI instead of a console
 
 	writeup.pdf is a writeup of my analysis
